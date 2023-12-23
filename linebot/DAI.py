@@ -122,15 +122,11 @@ def ExceptionHandler(err):
         time.sleep(1)    
     if MQTT_broker: mqttc.reconnect()
 
-def main():
-    while True:
-        try:
-            DF_function_handler()
-            time.sleep(exec_interval)
-        except BaseException as err:
-            ExceptionHandler(err)
-
 if __name__ == '__main__':
+    t = threading.Thread(target=main)
+    t.daemon = True
+    t.start()
+
     while True:
         try:
             DF_function_handler()
