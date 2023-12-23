@@ -8,27 +8,29 @@ MQTT_User = 'iottalk'
 MQTT_PW = 'iottalk2023'
 
 device_model = 'linebot007'
-IDF_list = ['linebot_str_i']
-ODF_list = ['linebot_str_o']
+IDF_list = ['linebot_json_i']
+ODF_list = ['linebot_json_o']
 device_id = '123456789' #if None, device_id = MAC address
 device_name = 'web'
 exec_interval = 1  # IDF/ODF interval
 
 import requests, json
-api_url = "http://127.0.0.1:8089/get_baby_state" # url to call api for getting baby state
+import config
+api_url = f"{config.APP_URL}/get_baby_state" # url to call api for getting baby state
 
 def on_register(r):
     print('Server: {}\nDevice name: {}\nRegister successfully.'.format(r['server'], r['d_name']))
 
-def linebot_str_i():
+def linebot_json_i():
     # message = read_message()
     # response = requests.get(api_url)
     # response = response.json()["state"]
     # if response:
     #     return message
     # else:
-        return None 
+    id = 'A007'
+    return {"id": id}
 
-def linebot_str_o(data:list):
+def linebot_json_o(data:list):
     print(data[0])
-    return data
+    return data[0]

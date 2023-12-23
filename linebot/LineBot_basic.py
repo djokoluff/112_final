@@ -6,11 +6,11 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError 
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
-# from myGlobal import IncommingMsg
+import config
 import threading
 
-line_bot_api = LineBotApi('+DqA5mJc18tgvO5lFbxLk/xaz9AvizJK8TUfhAYBzk1peSJFCrbyIUVPZ3HixYSibgM0JAEHnMR4/CtrLJlIAMeCylHK8VynMGl6xZkce9J5y7eYzrc4C25bY5PxEQ6/OPlw6u+uT4hx3pT74rrBdQdB04t89/1O/w1cDnyilFU=') #LineBot's Channel access token
-handler = WebhookHandler('d67f28faac475d3b5c0cadf36aaea9ff')        #LineBot's Channel secret
+line_bot_api = LineBotApi(config.LINEBOT_CHANNEL_ACCESS_TOKEN) #LineBot's Channel access token
+handler = WebhookHandler(config.LINEBOT_CHANNEL_SECRET)        #LineBot's Channel secret
 user_id_set=set()                                         #LineBot's Friend's user id 
 app = Flask(__name__)
 IncommingMsg = []
@@ -81,6 +81,15 @@ def send_mesage(userId, sendText):
         print(e)
 
 def main():
+    idList = loadUserId()
+    if idList: user_id_set = set(idList)
+
+    try:
+        for userId in user_id_set:
+            line_bot_api.push_message(userId, TextSendMessage(text='LineBot is ready for you.'))  # Push API example
+    except Exception as e:
+        print(e)
+        
     app.run('127.0.0.1', port=32768, threaded=True, use_reloader=False)
 
    

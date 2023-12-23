@@ -16,30 +16,33 @@ device_name = 'linebot'
 exec_interval = 1  # IDF/ODF interval
 
 import requests, json
-api_url = "http://127.0.0.1:8089/get_baby_state" # url to call api for getting baby state
+import config
+web_line_dict = {"A007": config.A007_LINEID}
 
 def on_register(r):
     print('Server: {}\nDevice name: {}\nRegister successfully.'.format(r['server'], r['d_name']))
 
 def linebot_json_i():
-    message = read_message() # (userid, msg)
-    response = requests.get(api_url)
+    response = requests.get(f'{config.APP_URL}/get_baby_state')
     response = response.json()["state"]
+
+    baby_id = requests.get(f'{config.APP_URL}/get_baby_id').json()["id"]
+    if baby_id in web_line_dict.keys():
+        user_id = web_line_dict[baby_id]
+    else:
+        return None # End
+
     if response: # baby is crying
         selected_music = "babyshark.mp3" # select music name from 's3'
-        if message:
-            print("user_id: ", message[0], "\nmusic: ", selected_music)
-            return {"user_id": message[0], "selected_music": selected_music}
-        return None
+        return {"user_id": user_id, "selected_music": selected_music}
     else:
         return None 
 
 def linebot_json_o(data:list):
-    print("data: ", data[0]) # {"user_id": message[0], "selected_music": selected_music}
-    api_url = "http://127.0.0.1:8089/play_music" # url to call for playing music
+    print("data: ", data[0]) # {"user_id": user_id, "selected_music": selected_music}
     selected_music = data[0]["selected_music"]
     try:
-        response = requests.post(api_url, json={'music_name': selected_music})
+        response = requests.post(f'{config.APP_URL}/play_music', json={'music_name': selected_music})
         if response.status_code == 200:
             print(f'Music {selected_music} play request sent successfully.')
         else:

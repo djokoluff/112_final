@@ -45,6 +45,10 @@ def play_music():
 def get_baby_state():
     return {'state': random.choice([True, False])}
 
+@app.route('/get_baby_id', methods=['GET'])
+def get_baby_id():
+    return {"id": random.choice(["A007", "A008", "A009", "A100", "A101"])}
+
 if __name__ == '__main__':
     t = threading.Thread(target=DAI_main)
     t.daemon = True
