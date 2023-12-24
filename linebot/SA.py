@@ -17,7 +17,9 @@ exec_interval = 1  # IDF/ODF interval
 
 import requests, json
 import config
-web_line_dict = {"A007": config.A007_LINEID}
+web_line_dict = {"A007": config.A007_LINEID, 
+                 "A010": config.A010_LINEID,
+                 "A101": config.A101_LINEID}
 
 def on_register(r):
     print('Server: {}\nDevice name: {}\nRegister successfully.'.format(r['server'], r['d_name']))

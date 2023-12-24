@@ -47,7 +47,7 @@ def get_baby_state():
 
 @app.route('/get_baby_id', methods=['GET'])
 def get_baby_id():
-    return {"id": random.choice(["A007", "A008", "A009", "A100", "A101"])}
+    return {"id": random.choice(["A007", "A008", "A009", "A010", "A101"])}
 
 if __name__ == '__main__':
     t = threading.Thread(target=DAI_main)

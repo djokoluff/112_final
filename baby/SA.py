@@ -32,5 +32,6 @@ def linebot_json_i():
     return {"id": id}
 
 def linebot_json_o(data:list):
-    print(data[0])
-    return data[0]
+    print("data: ", data[0]) # {"user_id": user_id, "selected_music": selected_music}
+    selected_music = data[0]["selected_music"]
+    
